@@ -24,9 +24,21 @@
         }
         public function select(string $table, array $fields, array $where_arr=array()){
             $this->queryBuilder = $this->queryBuilder->select($table, $fields);
-            
+            $this->where($where_arr);
+            $stmt = $this->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll();
+        }
+
+        public function insert($table, $fields){
+            $this->queryBuilder->insert($table, $fields);
+            $stmt = $this->execute();
+            return true;
+        }
+        protected function where($where_arr){
             if(!empty($where_arr) && !is_array($where_arr[0])){
-                $where_arr = array($where_arr
+                $where_arr = array(
+                    0 => $where_arr
                 );
             }
             foreach($where_arr as $where){
@@ -39,9 +51,18 @@
                 }
                 $this->queryBuilder = $this->queryBuilder->where($where[0], $where[1], $op);
             }
-            $stmt = $this->execute();
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            return $stmt->fetchAll();
+        }
+        public function delete($table, $where_arr){
+            $this->queryBuilder = $this->queryBuilder->delete($table);
+            $this->where($where_arr);
+            $this->execute();
+            return true;
+        }
+        public function update($table, $fields, $where_arr){
+            $this->queryBuilder->update($table, $fields);
+            $this->where($where_arr);
+            $this->execute();
+            return true;
         }
         public function execute(){
             $query = $this->queryBuilder->getQuery();
@@ -49,7 +70,6 @@
             $stmt->execute($query['params']);
             return $stmt;
         }
-
         public static function configure($host, $db, $user, $pass){
             self::configureHost($host);
             self::configureDB($db);
