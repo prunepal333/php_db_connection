@@ -22,6 +22,10 @@
             }
             return self::$instance;
         }
+
+        public function run_command($sql){
+            $this->conn->exec($sql);
+        }
         public function select(string $table, array $fields, array $where_arr=array()){
             $this->queryBuilder = $this->queryBuilder->select($table, $fields);
             $this->where($where_arr);
