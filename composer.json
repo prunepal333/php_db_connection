@@ -1,0 +1,13 @@
+{
+    "name": "ahambrahmashmi/mini_project",
+    "description": "a simle utility for database connection in php",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sick Sadist",
+            "email": "prunepal333@gmail.com"
+        }
+    ],
+    "require": {}
+}
